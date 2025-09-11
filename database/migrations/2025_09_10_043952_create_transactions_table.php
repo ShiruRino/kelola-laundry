@@ -17,7 +17,10 @@ return new class extends Migration
             $table->foreignId('customer_id')->references('id')->on('customers');
             $table->foreignId('outlet_id')->references('id')->on('outlets');
             $table->foreignId('product_id')->references('id')->on('products');
-            $table->enum('status', ['pending', 'processing', 'done']);
+            $table->enum('status', ['pending', 'processing', 'done'])->default('pending');
+            $table->timestamp('done_at')->nullable();
+            $table->boolean('picked_up')->default(false);
+            $table->integer('late_fee')->default(0);
             $table->integer('total_price');
             $table->timestamps();
         });

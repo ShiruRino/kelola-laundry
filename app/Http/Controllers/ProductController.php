@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Validator;
 
 class ProductController extends Controller
 {
@@ -12,7 +13,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::all();
+        return view('products.index', compact('products'));
     }
 
     /**
@@ -20,7 +22,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
 
     /**
@@ -28,12 +30,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'name' => 'required',
+            'description' => 'nullable',
+            'price' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails()){
+            return back()->withInput()->withErrors($validator);
+        }
+        Product::create($request->all());
+        return redirect()->route('products.index');
     }
 
     /**
      * Display the specified resource.
-     */
+    */
     public function show(Product $product)
     {
         //
@@ -41,18 +53,30 @@ class ProductController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     */
+    */
     public function edit(Product $product)
     {
-        //
+        return view('products.edit', compact('product'));
     }
 
     /**
      * Update the specified resource in storage.
-     */
+    */
     public function update(Request $request, Product $product)
     {
-        //
+        $rules = [
+            'name' => 'required',
+            'description' => 'nullable',
+            'price' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails()){
+            return back()->withInput()->withErrors($validator);
+        }
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        return redirect()->route('products.index');
     }
 
     /**
@@ -60,6 +84,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return redirect()->route('products.index');
     }
 }

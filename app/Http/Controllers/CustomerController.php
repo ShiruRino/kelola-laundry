@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Validator;
 
 class CustomerController extends Controller
 {
@@ -12,7 +13,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $customers = Customer::all();
+        return view('customers.index',compact('customers'));
     }
 
     /**
@@ -20,7 +22,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        return view('customers.create');
     }
 
     /**
@@ -28,12 +30,22 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'name' => 'required',
+            'phone' => 'required|unique:customers,phone',
+            'address' => 'required'
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails()){
+            return back()->withInput()->withErrors($validator);
+        }
+        Customer::create($request->all());
+        return redirect()->route('customers.index');
     }
 
     /**
      * Display the specified resource.
-     */
+    */
     public function show(Customer $customer)
     {
         //
@@ -41,18 +53,31 @@ class CustomerController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     */
+    */
     public function edit(Customer $customer)
     {
-        //
+        return view('customers.edit', compact('customer'));
     }
 
     /**
      * Update the specified resource in storage.
-     */
+    */
     public function update(Request $request, Customer $customer)
     {
-        //
+        $rules = [
+            'name' => 'required',
+            'phone' => 'required|unique:customers,phone',
+            'address' => 'required'
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails()){
+            return back()->withInput()->withErrors($validator);
+        }
+        $customer->name = $request->name;
+        $customer->phone = $request->phone;
+        $customer->address = $request->address;
+        $customer->save();
+        return redirect()->route('products.index');
     }
 
     /**
@@ -60,6 +85,7 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        $customer->delete();
+        return redirect()->route('products.index');
     }
 }
