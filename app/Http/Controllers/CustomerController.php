@@ -77,7 +77,7 @@ class CustomerController extends Controller
         $customer->phone = $request->phone;
         $customer->address = $request->address;
         $customer->save();
-        return redirect()->route('products.index');
+        return redirect()->route('customers.index');
     }
 
     /**
@@ -86,6 +86,6 @@ class CustomerController extends Controller
     public function destroy(Customer $customer)
     {
         $customer->delete();
-        return redirect()->route('products.index');
+        return redirect()->route('customers.index');
     }
 }

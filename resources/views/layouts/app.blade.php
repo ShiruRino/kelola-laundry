@@ -42,7 +42,6 @@
             <a href="{{route('outlets.index')}}" class="list-group-item mb-3">Manage Outlets</a>
             <a href="{{route('products.index')}}" class="list-group-item mb-3">Manage Products</a>
             <a href="{{route('users.index')}}" class="list-group-item mb-3">Manage Users</a>
-            <a href="{{route('customers.index')}}" class="list-group-item mb-3">Manage Customers</a>
             @endif
             @if (Auth::user()->role === 'admin' || Auth::user()->role === 'kasir')
             <a href="{{route('customers.index')}}" class="list-group-item mb-3">Manage Customers</a>

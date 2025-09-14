@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 use Validator;
 
 class UserController extends Controller
@@ -34,13 +36,20 @@ class UserController extends Controller
             'name' => 'required',
             'username' => 'required',
             'phone' => 'required',
+            'password' => 'required',
             'role' => 'required|in:kasir,owner,admin',
         ];
         $validator = Validator::make($request->all(),$rules);
         if($validator->fails()){
             return back()->withInput()->withErrors($validator);
         }
-        User::create($request->all());
+        User::create([
+            'name'=> $request->name,
+            'username'=>$request->username,
+            'phone'=>$request->phone,
+            'password'=> Hash::make($request->password),
+            'role'=>$request->role,
+        ]);
         return redirect()->route('users.index');
     }
 
@@ -66,14 +75,30 @@ class UserController extends Controller
     */
     public function update(Request $request, string $id)
     {
+        $user = User::find($id);
         $rules = [
             'name' => 'required',
             'username' => 'required',
             'phone' => 'required',
+            'password' => 'nullable',
             'role' => 'required|in:kasir,owner,admin',
         ];
         
+        $validator= Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return back()->withInput()->withErrors($validator);
+
+        }
+        $user->name = $request->name;
+        $user->username=$request->username;
+        $user->phone=$request->phone;
+        $user->password=$request->password ?? $user->password;
+        $user->role=$request->role;
+
+        $user->save();
+        return redirect()->route('users.index');
     }
+
 
     /**
      * Remove the specified resource from storage.

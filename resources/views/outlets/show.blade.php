@@ -18,6 +18,9 @@
 <div class="card mb-5">
     <div class="card-header">Manage Transactions</div>
     <div class="card-body">
+        @php
+        $no = 1;
+        @endphp
         <table class="table">
             <thead>
                 <th scope="col">#</th>
@@ -29,6 +32,21 @@
                 <th scope="col">Done At</th>
                 <th scope="col">Picked Up</th>
             </thead>
+            <tbody>
+                @foreach ($transactions as $i )
+                <tr>
+                    <th scope="row">$no++</th>
+                    <td>{{ $i->user->username }}</td>
+                    <td>{{ $i->customer->name }}</td>
+                    <td>{{ $i->outlet->name }}</td>
+                    <td>{{ $i->product->name }}</td>
+                    <td>{{ $i->status }}</td>
+                    <td>{{ $i->done_at }}</td>
+                    <td>{{ $i->picked_up }}</td>
+                </tr>
+                
+                @endforeach
+            </tbody>
         </table>
     </div>
 </div>
