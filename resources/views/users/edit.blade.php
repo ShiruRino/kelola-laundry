@@ -9,19 +9,19 @@
             @csrf
             @method('PUT')
 
-            <div class="input-group md-3 ">
+            <div class="md-3 ">
                 <input type="text" name="name" value="{{ $user->name }} " class="form-control">
             </div>
-            <div class="input-group md-3 mt-3">
+            <div class="md-3 mt-3">
                 <input type="text" name="username" value="{{ $user->username }} " class="form-control">
             </div>
-            <div class="input-group md-3 mt-3">
+            <div class="md-3 mt-3">
                 <input type="text" name="phone" value="{{ $user->phone }} " class="form-control">
             </div>
-            <div class="input-group md-3 mt-3">
+            <div class="md-3 mt-3">
                 <input type="text" name="password" class="form-control" placeholder="Password (If password edit unnecessary leave it empty)" >
             </div>
-            <div class="input-group md-3 mt-3">
+            <div class="md-3 mt-3">
                 <select name="role" class="form-select">
                     <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
                     <option value="kasir" {{ $user->role == 'kasir' ? 'selected' : '' }}>Kasir</option>

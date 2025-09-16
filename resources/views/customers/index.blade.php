@@ -3,7 +3,7 @@
 @section('content')
 
 <a href="{{ route('customers.create') }}" class="btn btn-success mt-5">Create</a>
-<div class="card mb-5 mt-5">
+<div class="card mb-5 mt-4">
     <div class="card-header">Manage Customers</div>
     <div class="card-body">
 
@@ -27,7 +27,7 @@
                 <td>{{ $i->name }}</td>
                 <td>{{ $i->phone }}</td>
                 <td>{{ $i->address }}</td>
-                <td class="d-flex" style="gap:0.5rem">    
+                <td class="d-flex" style="gap:0.5rem">
                     <a href="{{ route('customers.edit',$i->id) }}" class="btn btn-warning">Edit</a>
                     <form action="{{ route('customers.destroy',$i->id) }}" method="POST">
                         @csrf
@@ -38,7 +38,7 @@
                 </td>
             </tr>
 
-            
+
             @endforeach
         </tbody>
     </table>

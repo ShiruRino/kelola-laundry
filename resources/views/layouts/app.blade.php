@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title', 'Laundry')</title>
+    <link rel="icon" type="image/x-icon" href="{{asset('storage/logo/logo.png')}}"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <style>
@@ -35,7 +36,7 @@
 </head>
 <body>
     <aside class="sidebar bg-dark vh-100">
-        <div class="sidebar-brand mb-4"><a href="{{route('index')}}">Laundry</a></div>
+        <div class="sidebar-brand mb-4"><a href="{{route('index')}}"><img src="{{asset('storage/logo/logo.png')}}" alt="logo" width="40rem"> Laundry</a></div>
         <div class="container text-white">
             <a href="{{route('index')}}" class="list-group-item mb-3">Dashboard</a>
             @if (Auth::user()->role === 'admin')

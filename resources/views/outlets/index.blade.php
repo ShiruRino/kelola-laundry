@@ -1,7 +1,8 @@
 @extends('layouts.app')
 @section('title', 'Manage Outlets')
 @section('content')
-    <div class="card mt-5 mb-5">
+<a href="{{route('outlets.create')}}" class="btn btn-success mt-5">Create</a>
+    <div class="card mt-4 mb-5">
         <div class="card-header">
             @if (Auth::user()->role === 'admin')
                 Manage Outlets
@@ -10,7 +11,6 @@
             @endif
         </div>
         <div class="card-body">
-            <a href="{{route('outlets.create')}}" class="btn btn-success">Create</a>
             <table class="table">
                 <thead>
                     <tr>

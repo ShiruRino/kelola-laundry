@@ -3,7 +3,7 @@
 @section('content')
 
 <a href="{{ route('users.create') }}" class="btn btn-success mt-5">Create</a>
-<div class="card mt-5 md-5">
+<div class="card mt-4 md-5">
     <div class="card-header">Manage Users</div>
     <div class="card-body">
         <table class="table">
@@ -41,7 +41,7 @@
                         </form>
                     </td>
                 </tr>
-                
+
                 @endforeach
 
             </tbody>

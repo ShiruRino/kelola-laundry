@@ -49,9 +49,10 @@ class OutletController extends Controller
     */
     public function show(Outlet $outlet)
     {
-        $transactions = Transaction::orderBy('created_at','desc')->where('outlet_id', $outlet->id)->get();
-        return view('outlets.show', compact(['outlet', 'transactions']));
+        $transactions = $outlet->transactions()->latest()->get();
+        return view('outlets.show', compact('outlet', 'transactions'));
     }
+
 
     /**
      * Show the form for editing the specified resource.

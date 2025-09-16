@@ -6,7 +6,7 @@
 <div class="card">
     <div class="card-header">Manage Products</div>
     <div class="card-body">
-        <table class="table"> 
+        <table class="table">
             @php
             $no = 1;
             @endphp
@@ -26,7 +26,7 @@
                     <th scope="row">{{ $no++ }}</th>
                     <td>{{ $i->name }}</td>
                     <td>{{ $i->description ?? '' }}</td>
-                    <td>{{ $i->price }}</td>
+                    <td>Rp{{ $i->price }}</td>
                     <td class="d-flex" style="gap: 0.5rem;">
                         <a href="{{ route('products.edit',$i->id) }}" class="btn btn-warning">Edit</a>
                         <form action="{{ route('products.destroy',$i->id) }}" method="POST">
@@ -37,7 +37,7 @@
                         </form>
                     </td>
                 </tr>
-                
+
                 @endforeach
             </tbody>
         </table>

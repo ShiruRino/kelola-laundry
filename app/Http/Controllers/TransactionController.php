@@ -23,11 +23,14 @@ class TransactionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        $outlets = Outlet::all();
+        $outlet = null;
+        if($request->has('outlet_id')){
+            $outlet = Outlet::findOrFail($request->outlet_id);
+        }
         $products = Product::all();
-        return view('transactions.create', compact(['outlets', 'products']));
+        return view('transactions.create', compact('outlet', 'products'));
     }
 
     /**
@@ -39,7 +42,6 @@ class TransactionController extends Controller
             'customer_phone' => 'required|exists:customers,phone',
             'outlet_id' => 'required|exists:outlets,id',
             'product_id' => 'required|exists:products,id',
-            'status' => 'required|in:pending,processing,done',
         ];
         $validator = Validator::make($request->all(), $rules);
         if($validator->fails()){
@@ -55,7 +57,7 @@ class TransactionController extends Controller
             'status' => 'pending',
             'total_price' => $product->price
         ]);
-        return redirect()->route('outlets.index');
+        return redirect()->route('outlets.show',$request->outlet_id);
     }
 
     /**
@@ -101,6 +103,6 @@ class TransactionController extends Controller
     public function destroy(Transaction $transaction)
     {
         $transaction->delete();
-        return redirect()->route('outlets.index');
+        return redirect()->route('outlets.show', $transaction->outlet_id);
     }
 }

@@ -37,6 +37,7 @@ class UserController extends Controller
             'username' => 'required',
             'phone' => 'required',
             'password' => 'required',
+            'confirmPassword' => 'required|same:password',
             'role' => 'required|in:kasir,owner,admin',
         ];
         $validator = Validator::make($request->all(),$rules);
@@ -81,9 +82,10 @@ class UserController extends Controller
             'username' => 'required',
             'phone' => 'required',
             'password' => 'nullable',
+            'confirmPassword' => 'nullable|same:password',
             'role' => 'required|in:kasir,owner,admin',
         ];
-        
+
         $validator= Validator::make($request->all(),$rules);
         if($validator->fails()){
             return back()->withInput()->withErrors($validator);

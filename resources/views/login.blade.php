@@ -10,7 +10,12 @@
 </head>
 <body>
     <div class="container">
-        <div class="content d-flex align-items-center justify-content-center vh-100">
+        <div class="content d-flex flex-column align-items-center justify-content-center vh-100">
+            @if (session('error'))
+            <div class="alert alert-danger mb-5">
+                {{session('error')}}
+            </div>
+            @endif
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title text-center">Login</h3>
