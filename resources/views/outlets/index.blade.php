@@ -35,10 +35,10 @@
                             <a href="{{route('outlets.show',$outlet->id)}}" class="btn btn-primary">Show</a>
                             @if ('admin')
                             <a href="{{route('outlets.edit',$outlet->id)}}" class="btn btn-warning">Edit</a>
-                            <form action="{{route('outlets.destroy',$outlet->id)}}" method="post">
+                            <form action="{{route('outlets.destroy',$outlet->id)}}" method="post" onsubmit="return confirm('Are you sure?')">
                                 @csrf
                                 @method('POST')
-                                <button class="btn btn-danger" type="submit" onclick="confirm('Are you sure?')">Delete</button>
+                                <button class="btn btn-danger" type="submit">Delete</button>
                             </form>
                             @endif
                         </td>

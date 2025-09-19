@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'processing', 'done'])->default('pending');
             $table->timestamp('done_at')->nullable();
             $table->boolean('picked_up')->default(false);
+            $table->integer('vat_fee')->default(0);
             $table->integer('late_fee')->default(0);
             $table->integer('total_price');
             $table->timestamps();

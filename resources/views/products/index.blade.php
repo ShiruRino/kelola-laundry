@@ -25,15 +25,15 @@
                 <tr>
                     <th scope="row">{{ $no++ }}</th>
                     <td>{{ $i->name }}</td>
-                    <td>{{ $i->description ?? '' }}</td>
+                    <td>{{ $i->description ?? '-' }}</td>
                     <td>Rp{{ $i->price }}</td>
                     <td class="d-flex" style="gap: 0.5rem;">
                         <a href="{{ route('products.edit',$i->id) }}" class="btn btn-warning">Edit</a>
-                        <form action="{{ route('products.destroy',$i->id) }}" method="POST">
+                        <form action="{{ route('products.destroy',$i->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
                             @csrf
                             @method('DELETE')
 
-                            <button class="btn btn-danger" type="submit" onclick="confirm('Are you sure?')">Delete</button>
+                            <button class="btn btn-danger" type="submit">Delete</button>
                         </form>
                     </td>
                 </tr>
