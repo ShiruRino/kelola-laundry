@@ -4,6 +4,7 @@ use App\Models\Customer;
 use App\Models\Outlet;
 use App\Models\Product;
 use App\Models\User;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -25,12 +26,13 @@ Route::middleware('auth')->group(function(){
         $customers = Customer::count();
         return view('index', compact(['outlets', 'products', 'users', 'customers']));
     })->name('index');
-    Route::resource('users', UserController::class);
-    Route::resource('customers', CustomerController::class);
-    Route::resource('outlets', OutletController::class);
-    Route::resource('products', ProductController::class);
-    Route::resource('transactions', TransactionController::class);
-    Route::put('transactions/{id}/pickup', [TransactionController::class, 'pickup'])->name('transactions.pickup');
+    Route::resource('users', UserController::class)->middleware('role:admin');
+    Route::resource('products', ProductController::class)->middleware('role:admin');
+    Route::resource('outlets', OutletController::class)->middleware('role:admin');
+    Route::resource('customers', CustomerController::class)->middleware('role:admin,kasir');
+    Route::resource('transactions', TransactionController::class)->middleware('role:admin,kasir');
+    Route::put('transactions/{id}/pickup', [TransactionController::class, 'pickup'])->name('transactions.pickup')->middleware('role:admin,kasir');
+    Route::resource('outlets', OutletController::class)->only(['index','show'])->middleware('role:admin,kasir');
 
     Route::post('logout',[AuthController::class, 'logout'])->name('auth.logout');
 });

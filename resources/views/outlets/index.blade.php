@@ -1,8 +1,10 @@
 @extends('layouts.app')
 @section('title', 'Manage Outlets')
 @section('content')
+@if (Auth::user()->role === 'admin')
 <a href="{{route('outlets.create')}}" class="btn btn-success mt-5">Create</a>
-    <div class="card mt-4 mb-5">
+@endif
+    <div class="card mt-5 mb-5">
         <div class="card-header">
             @if (Auth::user()->role === 'admin')
                 Manage Outlets
@@ -33,11 +35,11 @@
                         <td>{{$outlet->address}}</td>
                         <td class="d-flex" style="gap: 0.5rem;">
                             <a href="{{route('outlets.show',$outlet->id)}}" class="btn btn-primary">Show</a>
-                            @if ('admin')
+                            @if (Auth::user()->role === 'admin')
                             <a href="{{route('outlets.edit',$outlet->id)}}" class="btn btn-warning">Edit</a>
                             <form action="{{route('outlets.destroy',$outlet->id)}}" method="post" onsubmit="return confirm('Are you sure?')">
                                 @csrf
-                                @method('POST')
+                                @method('DELETE')
                                 <button class="btn btn-danger" type="submit">Delete</button>
                             </form>
                             @endif

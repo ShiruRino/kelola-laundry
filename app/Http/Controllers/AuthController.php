@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\History;
 use App\Models\User;
 use Auth;
 use Hash;
@@ -41,8 +42,12 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
         $request>session('role', $user->role);
+        History::create([
+            'user_id' => $user->id,
+            'action' => 'login',
+            'table_name' => 'users'
+        ]);
         return redirect()->route('index')->with('success', 'Login Berhasil');
-
     }
     public function logout(Request $request){
         Auth::guard('web')->logout();
