@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\History;
 use App\Models\Outlet;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -41,6 +42,13 @@ class OutletController extends Controller
             return back()->withInput()->withErrors($validator);
         }
         Outlet::create($request->all());
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'create',
+            'table_name' => 'outlets',
+            'record_id' => Outlet::latest()->first()->id,
+            'description' => 'Created outlet '.$request->name,
+        ]);
         return redirect()->route('outlets.index');
     }
 
@@ -80,6 +88,13 @@ class OutletController extends Controller
         $outlet->phone = $request->phone;
         $outlet->phone = $request->address;
         $outlet->save();
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'update',
+            'table_name' => 'outlets',
+            'record_id' => $outlet->id,
+            'description' => 'Updated outlet '.$request->name,
+        ]);
         return redirect()->route('outlets.index');
     }
 
@@ -89,6 +104,13 @@ class OutletController extends Controller
     public function destroy(Outlet $outlet)
     {
         $outlet->delete();
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'delete',
+            'table_name' => 'outlets',
+            'record_id' => $outlet->id,
+            'description' => 'Deleted outlet '.$outlet->name,
+        ]);
         return redirect()->route('outlets.index');
     }
 }

@@ -2,6 +2,11 @@
 @section('title', 'Edit a Transaction Status')
 @section('content')
 <a href="{{route('outlets.show',$transaction->outlet->id)}}" class="btn btn-danger mt-5"><i class="bi bi-arrow-left"></i> Back</a>
+@if ($errors)
+@foreach ($errors->all() as $i)
+<div class="alert alert-danger mt-5">{{$i}}</div>
+@endforeach
+@endif
 <div class="card mt-5 mb-5">
     <div class="card-header">Transaction Info</div>
     <div class="card-body">
@@ -50,6 +55,13 @@
                     <option value="pending" {{$transaction->status == 'pending' ? 'selected' : ''}}>PENDING</option>
                     <option value="processing" {{$transaction->status == 'processing' ? 'selected' : ''}}>PROCESSING</option>
                     <option value="done" {{$transaction->status == 'done' ? 'selected' : ''}}>DONE</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="payment_status" class="form-label">Payment Status</label>
+                <select name="payment_status" class="form-select">
+                    <option value="pending" {{$transaction->payment_status == 'pending' ? 'selected' : ''}}>PENDING</option>
+                    <option value="paid" {{$transaction->payment_status == 'paid' ? 'selected' : ''}}>PAID</option>
                 </select>
             </div>
             <button class="btn btn-success" type="submit">Submit</button>

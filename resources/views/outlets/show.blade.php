@@ -29,6 +29,7 @@
                 <th scope="col">Customer</th>
                 <th scope="col">Outlet</th>
                 <th scope="col">Product</th>
+                <th scope="col">Payment Status</th>
                 <th scope="col">Status</th>
                 <th scope="col">Done At</th>
                 <th scope="col">Picked Up</th>
@@ -45,6 +46,13 @@
                     <td>{{ $i->customer->name }}</td>
                     <td>{{ $i->outlet->name }}</td>
                     <td>{{ $i->product->name }}</td>
+                    <td>
+                        @if ($i->payment_status == 'pending')
+                        <span class="text-warning">{{Str::upper($i->payment_status)}}</span>
+                        @else
+                        <span class="text-success">{{Str::upper($i->payment_status)}}</span>
+                        @endif
+                    </td>
                     <td>
                         @if ($i->status == 'pending')
                         <span class="text-warning">{{Str::upper($i->status)}}</span>

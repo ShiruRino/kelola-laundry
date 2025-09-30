@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\History;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Validator;
@@ -40,6 +41,13 @@ class ProductController extends Controller
             return back()->withInput()->withErrors($validator);
         }
         Product::create($request->all());
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'create',
+            'table_name' => 'products',
+            'record_id' => Product::latest()->first()->id,
+            'description' => 'Created product '.$request->name,
+        ]);
         return redirect()->route('products.index');
     }
 
@@ -77,6 +85,13 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->price = $request->price;
         $product->save();
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'update',
+            'table_name' => 'products',
+            'record_id' => $product->id,
+            'description' => 'Updated product '.$request->name,
+        ]);
         return redirect()->route('products.index');
     }
 
@@ -86,6 +101,13 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'delete',
+            'table_name' => 'products',
+            'record_id' => $product->id,
+            'description' => 'Deleted product '.$product->name,
+        ]);
         return redirect()->route('products.index');
     }
 }

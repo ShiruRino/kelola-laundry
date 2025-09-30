@@ -45,11 +45,20 @@ class AuthController extends Controller
         History::create([
             'user_id' => $user->id,
             'action' => 'login',
-            'table_name' => 'users'
+            'table_name' => 'users',
+            'record_id' => $user->id,
+            'description' => 'User '.$user->username.' logged in',
         ]);
         return redirect()->route('index')->with('success', 'Login Berhasil');
     }
     public function logout(Request $request){
+        History::create([
+            'user_id' => Auth::user()->id,
+            'action' => 'logout',
+            'table_name' => 'users',
+            'record_id' => Auth::user()->id,
+            'description' => 'User '.Auth::user()->username.' logged out',
+        ]);
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerate();

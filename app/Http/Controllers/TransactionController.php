@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\History;
 use Validator;
 use App\Models\Outlet;
 use App\Models\Product;
@@ -42,6 +43,7 @@ class TransactionController extends Controller
             'customer_phone' => 'required|exists:customers,phone',
             'outlet_id' => 'required|exists:outlets,id',
             'product_id' => 'required|exists:products,id',
+            'payment_status' => 'required|in:pending,paid',
         ];
         $validator = Validator::make($request->all(), $rules);
         if($validator->fails()){
@@ -56,9 +58,17 @@ class TransactionController extends Controller
             'customer_id' => $customer->id,
             'outlet_id' => $request->outlet_id,
             'product_id' => $request->product_id,
+            'payment_status' => $request->payment_status,
             'status' => 'pending',
             'vat_fee' => $vat,
             'total_price' => $total
+        ]);
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'create',
+            'table_name' => 'transactions',
+            'record_id' => Transaction::latest()->first()->id,
+            'description' => 'Created transaction for customer '.$customer->name,
         ]);
         return redirect()->route('outlets.show',$request->outlet_id);
     }
@@ -86,7 +96,8 @@ class TransactionController extends Controller
     public function update(Request $request, Transaction $transaction)
     {
         $rules = [
-            'status' => 'required'
+            'status' => 'required',
+            'payment_status' => 'required'
         ];
         $validator = Validator::make($request->all(), $rules);
         if($validator->fails()){
@@ -100,13 +111,29 @@ class TransactionController extends Controller
             $transaction->done_at = now();
         }
         $transaction->status = $request->status;
+        $transaction->payment_status = $request->payment_status;
         $transaction->save();
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'update',
+            'table_name' => 'transactions',
+            'record_id' => $transaction->id,
+            'description' => 'Updated transaction for customer '.$transaction->customer->name,
+        ]);
         return redirect()->route('outlets.show', $transaction->outlet->id);
     }
     public function pickup($id){
         $transaction = Transaction::findOrFail($id);
+        $transaction->payment_status = 'paid';
         $transaction->picked_up = !$transaction->picked_up;
         $transaction->save();
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'update',
+            'table_name' => 'transactions',
+            'record_id' => $transaction->id,
+            'description' => 'Picked up transaction for customer '.$transaction->customer->name,
+        ]);
         return redirect()->route('outlets.show',$transaction->outlet->id);
     }
 
@@ -116,6 +143,13 @@ class TransactionController extends Controller
     public function destroy(Transaction $transaction)
     {
         $transaction->delete();
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'delete',
+            'table_name' => 'transactions',
+            'record_id' => $transaction->id,
+            'description' => 'Deleted transaction for customer '.$transaction->customer->name,
+        ]);
         return redirect()->route('outlets.show', $transaction->outlet_id);
     }
 }

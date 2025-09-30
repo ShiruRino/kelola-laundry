@@ -50,6 +50,9 @@
             @if(Auth::user()->role !== 'admin')
             <a href="{{route('outlets.index')}}" class="list-group-item mb-3">Outlets</a>
             @endif
+            @if (Auth::user()->role === 'admin')
+            <a href="{{route('histories.index')}}" class="list-group-item mb-3">History Log</a>
+            @endif
             <form action="{{route('auth.logout')}}" method="post">
                 @csrf
                 @method('POST')

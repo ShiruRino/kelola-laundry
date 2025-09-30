@@ -34,6 +34,14 @@
                 @endforeach
             </select>
         </div>
+        <div class="mb-3">
+            <label for="payment_status" class="form-label">Payment Status</label>
+            <select name="payment_status" class="form-select">
+                <option value="">Select Payment Status</option>
+                <option value="pending">PENDING</option>
+                <option value="paid">PAID</option>
+            </select>
+        </div>
         <input type="hidden" value="{{$outlet->id}}" name="outlet_id">
         <button class="btn btn-success" type="submit">Submit</button>
     </form>

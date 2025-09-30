@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\History;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -51,6 +52,13 @@ class UserController extends Controller
             'password'=> Hash::make($request->password),
             'role'=>$request->role,
         ]);
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'create',
+            'table_name' => 'users',
+            'record_id' => User::latest()->first()->id,
+            'description' => 'Created user '.$request->name,
+        ]);
         return redirect()->route('users.index');
     }
 
@@ -98,6 +106,13 @@ class UserController extends Controller
         $user->role=$request->role;
 
         $user->save();
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'update',
+            'table_name' => 'users',
+            'record_id' => $user->id,
+            'description' => 'Updated user '.$request->name,
+        ]);
         return redirect()->route('users.index');
     }
 
@@ -107,6 +122,15 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'delete',
+            'table_name' => 'users',
+            'record_id' => $user->id,
+            'description' => 'Deleted user '.$user->name,
+        ]);
+        return redirect()->route('users.index');
     }
 }

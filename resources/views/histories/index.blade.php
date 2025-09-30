@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'History Log')
 @section('content')
-<div class="card">
+<div class="card mt-5 mb-5">
     <div class="card-header">History Log</div>
     <div class="card-body">
         <table class="table">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\History;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -40,6 +41,13 @@ class CustomerController extends Controller
             return back()->withInput()->withErrors($validator);
         }
         Customer::create($request->all());
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'create',
+            'table_name' => 'customers',
+            'record_id' => Customer::latest()->first()->id,
+            'description' => 'Created customer '.$request->name,
+        ]);
         return redirect()->route('customers.index');
     }
 
@@ -77,6 +85,13 @@ class CustomerController extends Controller
         $customer->phone = $request->phone;
         $customer->address = $request->address;
         $customer->save();
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'update',
+            'table_name' => 'customers',
+            'record_id' => $customer->id,
+            'description' => 'Updated customer '.$request->name,
+        ]);
         return redirect()->route('customers.index');
     }
 
@@ -86,6 +101,13 @@ class CustomerController extends Controller
     public function destroy(Customer $customer)
     {
         $customer->delete();
+        History::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'delete',
+            'table_name' => 'customers',
+            'record_id' => $customer->id,
+            'description' => 'Deleted customer '.$customer->name,
+        ]);
         return redirect()->route('customers.index');
     }
 }
